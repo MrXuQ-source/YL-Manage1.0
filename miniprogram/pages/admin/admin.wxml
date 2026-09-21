@@ -1,0 +1,67 @@
+<view class="container">
+  <!-- 顶部导出按钮 -->
+  <view class="header">
+    <text class="header-title">数据管理</text>
+    <view class="export-btn" bindtap="onExport">
+      <text class="export-icon">📤</text>
+    </view>
+  </view>
+
+  <!-- 筛选栏 -->
+  <view class="filter-card">
+    <view class="filter-row">
+      <text class="f-label">日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="f-picker">{{startDate || '开始日期'}}</view>
+      </picker>
+      <text class="f-sep">→</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="f-picker">{{endDate || '结束日期'}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <text class="f-label">状态</text>
+      <picker mode="selector" range="{{statusOptions}}" value="{{statusFilter}}" bindchange="onStatusChange">
+        <view class="f-picker">{{statusOptions[statusFilter]}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <text class="f-label">危废名称</text>
+      <input class="f-input" value="{{wasteNameFilter}}" bindinput="onWasteNameInput" placeholder="模糊搜索"/>
+    </view>
+    <view class="filter-row">
+      <text class="f-label">危废代码</text>
+      <input class="f-input" value="{{wasteCodeFilter}}" bindinput="onWasteCodeInput" placeholder="模糊搜索"/>
+    </view>
+    <view class="filter-row">
+      <picker mode="selector" range="{{departmentList}}" value="{{selectedDepartmentIndex}}" bindchange="onDeptChange">
+        <view class="f-picker">{{selectedDepartment || '运行部名称'}}</view>
+      </picker>
+      <picker mode="selector" range="{{deviceList}}" bindchange="onDeviceChange">
+        <view class="f-picker">{{selectedDevice || '装置名称'}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <button class="f-btn reset" bindtap="onReset">重置</button>
+      <text class="total">共 {{totalCount}} 条</text>
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="list">
+    <view class="card" wx:for="{{filteredList}}" wx:key="_id">
+      <view class="card-top">
+        <text class="card-batch">{{item.packageNo || item.batch_no}}</text>
+        <text class="card-status {{item.status==1?'in':'out'}}">{{item.status==1?'在库':'已出库'}}</text>
+        <button class="out-btn" wx:if="{{item.status==1}}" data-id="{{item._id}}" bindtap="outStock">出库</button>
+      </view>
+      <view class="card-row"><text class="c-label">危废名称</text><text>{{item.waste_name}} ({{item.waste_code}})</text></view>
+      <view class="card-row"><text class="c-label">装置名称</text><text>{{item.department}} · {{item.device}}</text></view>
+      <view class="card-row"><text class="c-label">重量</text><text>{{item.weight ? item.weight+'吨' : '-'}}</text></view>
+      <view class="card-row"><text class="c-label">容器编码</text><text>{{item.container_no || '-'}}</text></view>
+      <view class="card-row"><text class="c-label">日期</text><text>{{item.produce_date_str}}</text></view>
+      <view class="card-row" wx:if="{{item.status==2}}"><text class="c-label">出库</text><text>{{item.out_stock_time || '-'}}</text></view>
+    </view>
+    <view class="empty" wx:if="{{filteredList.length==0}}">暂无数据</view>
+  </view>
+</view>

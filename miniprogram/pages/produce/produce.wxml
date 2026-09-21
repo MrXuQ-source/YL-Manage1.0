@@ -1,0 +1,91 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">产废信息填报</view>
+  </view>
+
+  <view style="background:#fffbe6;border:1rpx solid #ffe58f;border-radius:8rpx;padding:16rpx;margin-bottom:20rpx;font-size:24rpx;color:#8a6d3b;">
+    📌 计量单位统一为"吨"，称重时请按吨录入。产生日期自动取当天。
+  </view>
+
+  <view class="card">
+    <view class="form-item">
+      <label>产生日期</label>
+      <text>{{todayDate}}</text>
+    </view>
+
+    <view class="form-item">
+      <label>运行部</label>
+      <picker range="{{deptList}}" value="{{deptIndex}}" bindchange="onDeptChange">
+        <view style="padding:12rpx 0;">{{deptList[deptIndex] || '请选择运行部'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item" style="position:relative;">
+      <label>产废装置</label>
+      <input value="{{facilitySearchText}}" bindinput="onFacilitySearchInput" bindfocus="onFacilityFocus" placeholder="搜索或手填产废装置" style="border:1rpx solid #ddd;border-radius:6rpx;padding:10rpx;" />
+      <view wx:if="{{showFacilityOptions && filteredFacilities.length > 0}}" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1rpx solid #ddd;border-top:none;max-height:300rpx;overflow-y:auto;z-index:100;">
+        <view wx:for="{{filteredFacilities}}" wx:key="*this" data-name="{{item}}" bindtap="onSelectFacility" style="padding:16rpx;border-bottom:1rpx solid #f0f0f0;font-size:26rpx;">
+          {{item}}
+        </view>
+      </view>
+      <view wx:if="{{showFacilityOptions && filteredFacilities.length === 0}}" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1rpx solid #ddd;border-top:none;padding:16rpx;color:#999;font-size:24rpx;z-index:100;">
+        无匹配，将使用手填内容
+      </view>
+    </view>
+
+    <view class="form-item">
+      <label>危废名称</label>
+      <picker mode="selector" range="{{wasteList}}" range-key="waste_name" value="{{wasteIndex}}" bindchange="onWasteChange">
+        <view style="padding:12rpx 0;">{{wasteList[wasteIndex].waste_name || '请选择危废'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <label>危废代码</label>
+      <input value="{{wasteCode}}" disabled placeholder="自动带出" style="color:#999;" />
+    </view>
+
+    <view class="form-item">
+      <label>包装类型</label>
+      <picker range="{{pkgTypes}}" value="{{pkgTypeIndex}}" bindchange="onPkgTypeChange">
+        <view style="padding:12rpx 0;">{{pkgTypes[pkgTypeIndex] || '请选择'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <label>包装容量</label>
+      <picker range="{{capacityOptions}}" value="{{capacityIndex}}" bindchange="onCapacityChange">
+        <view style="padding:12rpx 0;">{{capacityOptions[capacityIndex] || '请选择容量'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <label>包装材质</label>
+      <picker range="{{materialOptions}}" value="{{materialIndex}}" bindchange="onMaterialChange">
+        <view style="padding:12rpx 0;">{{materialOptions[materialIndex] || '请选择材质'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <label>包装数量</label>
+      <input type="number" value="{{packageQty}}" bindinput="onPackageInput" placeholder="如：5（将生成5条记录）" />
+    </view>
+
+    <view class="form-item">
+      <label>责任人</label>
+      <input value="{{personLiable}}" bindinput="onPersonInput" placeholder="姓名" />
+    </view>
+
+    <view class="form-item">
+      <label>联系方式</label>
+      <input type="number" value="{{contact}}" bindinput="onContactInput" placeholder="手机号" />
+    </view>
+
+    <view class="form-item">
+      <label>去向</label>
+      <input value="{{destination}}" bindinput="onDestinationInput" placeholder="默认：危废暂存库" />
+    </view>
+  </view>
+
+  <view class="btn-primary" bindtap="submitProduce">提交（按数量生成台账）</view>
+</view>

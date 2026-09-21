@@ -1,0 +1,8 @@
+{
+  "name": "importDeviceWasteToDict",
+  "version": "1.0.0",
+  "description": "导入装置危废清单",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "~2.6.3" },
+  "config": { "cloud_path": "" }
+}

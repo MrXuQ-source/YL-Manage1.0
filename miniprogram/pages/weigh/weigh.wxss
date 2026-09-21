@@ -1,0 +1,83 @@
+/* ========== 页面基础样式 ========== */
+.container { padding: 20rpx; background: #f5f5f5; min-height: 100vh; padding-bottom: 120rpx; box-sizing: border-box; }
+
+.filter-card { background: #fff; border-radius: 12rpx; padding: 20rpx 30rpx; margin-bottom: 20rpx; }
+.filter-row { display: flex; align-items: center; margin-bottom: 15rpx; flex-wrap: wrap; }
+.filter-label { font-size: 26rpx; color: #666; width: 100rpx; flex-shrink: 0; }
+.filter-picker { flex: 1; font-size: 26rpx; color: #333; border: 1rpx solid #e0e0e0; border-radius: 8rpx; padding: 10rpx 15rpx; margin-right: 10rpx; min-width: 160rpx; text-align: center; }
+.filter-input { flex: 1; font-size: 26rpx; border: 1rpx solid #e0e0e0; border-radius: 8rpx; padding: 10rpx 15rpx; min-width: 200rpx; }
+.btn-reset { font-size: 26rpx; padding: 10rpx 30rpx; border-radius: 8rpx; background: #f5f5f5; color: #666; border: 1rpx solid #ddd; margin-right: 15rpx; line-height: 1.6; }
+.btn-search { font-size: 26rpx; padding: 10rpx 30rpx; border-radius: 8rpx; background: #1890ff; color: #fff; margin-right: 15rpx; line-height: 1.6; }
+.total-count { font-size: 24rpx; color: #999; margin-left: auto; }
+
+.tabs { display: flex; background: #fff; border-radius: 12rpx; margin-bottom: 20rpx; overflow: hidden; }
+.tab { flex: 1; text-align: center; padding: 24rpx 0; font-size: 28rpx; color: #666; border-bottom: 4rpx solid transparent; }
+.tab.active { color: #09bb07; border-bottom-color: #09bb07; font-weight: bold; }
+
+.list-box { padding-bottom: 30rpx; }
+.card { background: #fff; border-radius: 12rpx; padding: 25rpx 30rpx; margin-bottom: 20rpx; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15rpx; padding-bottom: 15rpx; border-bottom: 1rpx solid #f0f0f0; }
+.batch-text { font-size: 28rpx; font-weight: bold; color: #333; }
+.status-tag { font-size: 22rpx; padding: 4rpx 16rpx; border-radius: 6rpx; }
+.status-tag.in { background: #e6f7ff; color: #1890ff; }
+.status-tag.waiting { background: #fffbe6; color: #faad14; }
+
+.card-row { display: flex; padding: 8rpx 0; font-size: 26rpx; color: #333; align-items: center; }
+.card-label { color: #999; width: 130rpx; flex-shrink: 0; }
+
+/* 重量行：flex 布局让按钮紧跟在重量右侧 */
+.weight-row {
+  display: flex;
+  align-items: center;
+}
+.weight-text { color: #f5222d; font-weight: bold; font-size: 30rpx; margin-right: 20rpx; }
+
+/* 修改重量按钮：行内小按钮，蓝色描边 */
+.btn-edit-weight {
+  font-size: 22rpx;
+  padding: 4rpx 20rpx;
+  border-radius: 6rpx;
+  background: #fff;
+  color: #1890ff;
+  border: 1rpx solid #1890ff;
+  line-height: 1.8;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.card-actions { display: flex; justify-content: flex-end; margin-top: 15rpx; padding-top: 15rpx; border-top: 1rpx solid #f0f0f0; }
+.btn-weigh { font-size: 24rpx; padding: 8rpx 30rpx; border-radius: 8rpx; background: #faad14; color: #fff; line-height: 1.8; margin: 0 10rpx 0 0; }
+.btn-delete { font-size: 24rpx; padding: 8rpx 30rpx; border-radius: 8rpx; background: #ff4d4f; color: #fff; line-height: 1.8; margin: 0; }
+.empty { text-align: center; padding: 80rpx 0; color: #999; font-size: 28rpx; }
+
+/* ========== 自定义弹窗样式 ========== */
+.modal-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999;
+}
+.modal-content {
+  width: 580rpx; background: #fff; border-radius: 16rpx;
+  padding: 40rpx 30rpx; box-sizing: border-box;
+}
+.modal-title { font-size: 34rpx; font-weight: bold; text-align: center; color: #333; margin-bottom: 20rpx; }
+.modal-batch { font-size: 26rpx; color: #666; text-align: center; margin-bottom: 30rpx; }
+.modal-input-box {
+  display: flex; align-items: center; border: 1rpx solid #ddd; border-radius: 8rpx;
+  padding: 0 20rpx; margin-bottom: 40rpx;
+}
+.modal-input { flex: 1; font-size: 32rpx; padding: 20rpx 0; }
+.modal-unit { font-size: 28rpx; color: #999; margin-left: 10rpx; }
+.modal-btns { display: flex; border-top: 1rpx solid #f0f0f0; margin: 0 -30rpx -40rpx; }
+.modal-btn-cancel, .modal-btn-confirm {
+  flex: 1; text-align: center; padding: 24rpx 0; font-size: 30rpx;
+  border: none; border-radius: 0; line-height: 1.6; margin: 0;
+}
+.modal-btn-cancel { color: #666; background: #f5f5f5; border-bottom-left-radius: 16rpx; }
+.modal-btn-confirm { color: #09bb07; background: #fff; border-bottom-right-radius: 16rpx; border-left: 1rpx solid #f0f0f0; }
+.inbound-text {
+  color: #1890ff;
+  font-weight: 500;
+  font-size: 26rpx;
+}

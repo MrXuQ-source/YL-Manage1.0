@@ -1,0 +1,25 @@
+.container { padding: 20rpx; background: #f5f5f5; min-height: 100vh; padding-bottom: 30rpx; }
+.header { display: flex; align-items: center; justify-content: space-between; padding: 20rpx 0; }
+.header-title { font-size: 36rpx; font-weight: bold; color: #333; }
+.export-btn { width: 70rpx; height: 70rpx; background: #09bb07; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.export-icon { font-size: 32rpx; }
+.filter-card { background: #fff; border-radius: 12rpx; padding: 20rpx; margin-bottom: 20rpx; }
+.filter-row { display: flex; align-items: center; gap: 12rpx; margin-bottom: 12rpx; flex-wrap: wrap; }
+.f-label { font-size: 24rpx; color: #666; width: 80rpx; flex-shrink: 0; }
+.f-picker { font-size: 24rpx; color: #09bb07; border: 1rpx solid #ddd; border-radius: 8rpx; padding: 6rpx 15rpx; }
+.f-input { flex:1; font-size: 24rpx; border:1rpx solid #ddd; border-radius:8rpx; padding:6rpx 15rpx; min-width: 150rpx; }
+.f-sep { font-size: 24rpx; color: #999; }
+.f-btn { font-size: 24rpx; padding: 0 20rpx; height: 50rpx; line-height: 50rpx; border-radius: 8rpx; }
+.f-btn.reset { background: #f0f0f0; color: #333; }
+.total { font-size: 24rpx; color: #999; margin-left: auto; }
+.list { padding-bottom: 30rpx; }
+.card { background: #fff; border-radius: 12rpx; padding: 20rpx; margin-bottom: 15rpx; }
+.card-top { display: flex; align-items: center; margin-bottom: 10rpx; }
+.card-batch { font-size: 26rpx; font-weight: bold; flex: 1; }
+.card-status { font-size: 22rpx; padding: 4rpx 12rpx; border-radius: 6rpx; margin-right: 15rpx; }
+.card-status.in { background: #e8f8e8; color: #09bb07; }
+.card-status.out { background: #f5f5f5; color: #999; }
+.out-btn { font-size: 22rpx; background: #ff4d4f; color: #fff; padding: 0 20rpx; height: 48rpx; line-height: 48rpx; border-radius: 6rpx; }
+.card-row { display: flex; padding: 6rpx 0; font-size: 24rpx; }
+.c-label { color: #999; width: 130rpx; flex-shrink: 0; }
+.empty { text-align: center; color: #999; padding: 60rpx 0; font-size: 28rpx; }

@@ -1,0 +1,79 @@
+<view class="container">
+  <view class="form-card">
+    <view class="row">
+      <text class="label">产生日期</text>
+      <text class="value">{{date}}</text>
+    </view>
+
+    <view class="row">
+      <text class="label">运行部 *</text>
+      <picker mode="selector" range="{{departmentList}}" value="{{selectedDepartmentIndex}}" bindchange="onDepartmentChange">
+        <view class="picker">{{selectedDepartment || '请选择运行部'}}</view>
+      </picker>
+    </view>
+
+    <view class="row">
+      <text class="label">产废装置 *</text>
+      <picker mode="selector" range="{{deviceList}}" bindchange="onDeviceChange">
+        <view class="picker">{{selectedDevice || '下拉选择装置'}}</view>
+      </picker>
+    </view>
+    <view class="row">
+      <text class="label">或手动输入</text>
+      <input class="input" value="{{customDevice}}" bindinput="onCustomDeviceInput" placeholder="直接输入装置名称"/>
+    </view>
+
+    <view class="row" bindtap="onWasteNameTap">
+      <text class="label">危废名称 *</text>
+      <view class="picker">{{wasteName || '请选择危废'}}</view>
+    </view>
+
+    <view class="row">
+      <text class="label">危废代码</text>
+      <text class="value">{{wasteCode || '-'}}</text>
+    </view>
+
+    <view class="row">
+      <text class="label">包装类型</text>
+      <picker mode="selector" range="{{packageTypeOptions}}" value="{{packageTypeIndex}}" bindchange="onPackageTypeChange">
+        <view class="picker">{{packageType}}</view>
+      </picker>
+    </view>
+
+    <view class="row">
+      <text class="label">包装容量</text>
+      <picker mode="selector" range="{{capacityOptions}}" value="{{capacityIndex}}" bindchange="onCapacityChange">
+        <view class="picker">{{capacity}}</view>
+      </picker>
+    </view>
+
+    <view class="row">
+      <text class="label">包装材质</text>
+      <picker mode="selector" range="{{materialOptions}}" value="{{materialIndex}}" bindchange="onMaterialChange">
+        <view class="picker">{{material}}</view>
+      </picker>
+    </view>
+
+    <view class="row">
+      <text class="label">包装数量 *</text>
+      <input class="input" value="{{count}}" bindinput="onCountInput" placeholder="输入数量N生成N条" type="number"/>
+    </view>
+
+    <view class="row">
+      <text class="label">责任人</text>
+      <input class="input" value="{{person}}" bindinput="onPersonInput" placeholder="请输入"/>
+    </view>
+
+    <view class="row">
+      <text class="label">联系方式</text>
+      <input class="input" value="{{contact}}" bindinput="onContactInput" placeholder="11位手机号" type="number" maxlength="11"/>
+    </view>
+
+    <view class="row">
+      <text class="label">去向</text>
+      <text class="value">{{destination}}</text>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="submit">提交生成</button>
+</view>

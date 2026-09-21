@@ -1,0 +1,8 @@
+{
+  "name": "getWasteDict",
+  "version": "1.0.0",
+  "description": "分页查询危废名录",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "~2.6.3" },
+  "config": { "cloud_path": "" }
+}

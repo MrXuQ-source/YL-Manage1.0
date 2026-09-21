@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/report/report",
+    "pages/weigh/weigh",
+    "pages/admin/admin",
+    "pages/dataManage/dataManage",
+    "pages/dictManage/dictManage"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#09bb07",
+    "navigationBarTitleText": "固废管理系统",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#09bb07",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/report/report",
+        "text": "产废填报"
+      },
+      {
+        "pagePath": "pages/weigh/weigh",
+        "text": "入库称重"
+      },
+      {
+        "pagePath": "pages/dataManage/dataManage",
+        "text": "数据管理"
+      },
+      {
+        "pagePath": "pages/dictManage/dictManage",
+        "text": "危废管理"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json"
+}

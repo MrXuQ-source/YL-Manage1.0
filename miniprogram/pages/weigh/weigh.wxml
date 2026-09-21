@@ -1,0 +1,110 @@
+<view class="container">
+  <!-- 筛选区 -->
+  <view class="filter-card">
+    <view class="filter-row">
+      <text class="filter-label">开始</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="filter-picker">{{startDate || '选择日期'}}</view>
+      </picker>
+      <text class="filter-label">结束</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="filter-picker">{{endDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">运行部名称</text>
+      <input class="filter-input" placeholder="输入运行部" value="{{department}}" bindinput="onDeptInput" />
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">装置名称</text>
+      <input class="filter-input" placeholder="输入装置" value="{{device}}" bindinput="onDeviceInput" />
+    </view>
+
+    <view class="filter-row">
+      <button class="btn-reset" bindtap="resetFilter">重置</button>
+      <button class="btn-search" bindtap="loadData">查询</button>
+      <text class="total-count">共 {{list.length}} 条</text>
+    </view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tabs">
+    <view class="tab {{activeTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-tab="0">
+      待称重 ({{totalWaiting}})
+    </view>
+    <view class="tab {{activeTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-tab="1">
+      已称重 ({{totalWeighed}})
+    </view>
+  </view>
+
+  <!-- 数据列表 -->
+  <view class="list-box">
+    <block wx:if="{{list.length > 0}}">
+      <view class="card" wx:for="{{list}}" wx:key="_id">
+        <view class="card-header">
+          <text class="batch-text">批次：{{item.batchNo || item.packageNo || '-'}}</text>
+          <view class="status-tag waiting" wx:if="{{item.status === 0}}">待称重</view>
+          <view class="status-tag in" wx:if="{{item.status === 1}}">已称重</view>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">危废名称</text>
+          <text>{{item.wasteName || '-'}} ({{item.wasteCode || '-'}})</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">装置名称</text>
+          <text>{{item.department || '-'}} · {{item.device || '-'}}</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">容器编码</text>
+          <text>{{item.containerCode || '-'}}</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">日期</text>
+          <text>{{item.produceDate || '-'}}</text>
+        </view>
+
+        <!-- 重量行：已称重时显示重量 + 修改按钮 -->
+        <view class="card-row weight-row" wx:if="{{item.status === 1 && item.weight}}">
+          <text class="card-label">重量</text>
+          <text class="weight-text">{{item.weight}} 吨</text>
+          <button class="btn-edit-weight" bindtap="goEditWeight" data-id="{{item._id}}" data-batch="{{item.batchNo || item.packageNo}}" data-weight="{{item.weight}}">修改</button>
+        </view>
+
+        <!-- 入库编码行 -->
+        <view class="card-row" wx:if="{{item.status === 1 && item.inboundNo}}">
+          <text class="card-label">入库编码</text>
+          <text class="inbound-text">{{item.inboundNo}}</text>
+        </view>
+
+        <!-- 待称重：显示称重+删除按钮 -->
+        <view class="card-actions" wx:if="{{activeTab === 0}}">
+          <button class="btn-weigh" bindtap="goWeigh" data-id="{{item._id}}" data-batch="{{item.batchNo || item.packageNo}}">称重</button>
+          <button class="btn-delete" bindtap="deleteItem" data-id="{{item._id}}">删除</button>
+        </view>
+      </view>
+    </block>
+    <view wx:else class="empty">暂无数据</view>
+  </view>
+
+  <!-- ===== 自定义称重弹窗 ===== -->
+  <view class="modal-mask" wx:if="{{showWeighModal}}" bindtap="closeWeighModal">
+    <view class="modal-content" catchtap>
+      <view class="modal-title">{{isEditMode ? '修改重量' : '录入重量'}}</view>
+      <view class="modal-batch">批次：{{currentBatch}}</view>
+      <view class="modal-input-box">
+        <input class="modal-input" type="digit" placeholder="请输入重量" value="{{inputWeight}}" bindinput="onWeightInput" focus="{{true}}" />
+        <text class="modal-unit">吨</text>
+      </view>
+      <view class="modal-btns">
+        <button class="modal-btn-cancel" bindtap="closeWeighModal">取消</button>
+        <button class="modal-btn-confirm" bindtap="confirmWeigh">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

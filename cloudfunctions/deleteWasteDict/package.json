@@ -1,0 +1,8 @@
+{
+  "name": "deleteWasteDict",
+  "version": "1.0.0",
+  "description": "删除危废名录条目",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "~2.6.3" },
+  "config": { "cloud_path": "" }
+}

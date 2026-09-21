@@ -1,0 +1,8 @@
+{
+  "name": "getWasteDictOptions",
+  "version": "1.0.0",
+  "description": "加载危废名录筛选选项与统计",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "~2.6.3" },
+  "config": { "cloud_path": "" }
+}

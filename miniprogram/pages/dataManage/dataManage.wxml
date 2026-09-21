@@ -1,0 +1,112 @@
+<view class="container">
+  <!-- 顶部 -->
+  <view class="top-bar">
+    <text class="page-title">数据管理</text>
+    <button class="export-btn" bindtap="exportData">导出Excel</button>
+  </view>
+
+  <!-- 筛选卡片 -->
+  <view class="filter-card">
+    <view class="filter-row">
+      <text class="filter-label">开始</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="filter-picker">{{startDate || '选择日期'}}</view>
+      </picker>
+      <text class="filter-label">结束</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="filter-picker">{{endDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">状态</text>
+      <view class="status-tabs">
+        <view class="status-tab {{status === '' ? 'active' : ''}}" bindtap="onStatusChange" data-status="">全部</view>
+        <view class="status-tab {{status === 0 ? 'active' : ''}}" bindtap="onStatusChange" data-status="0">待称重</view>
+        <view class="status-tab {{status === 1 ? 'active' : ''}}" bindtap="onStatusChange" data-status="1">在库</view>
+        <view class="status-tab {{status === 2 ? 'active' : ''}}" bindtap="onStatusChange" data-status="2">已出库</view>
+      </view>
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">危废名称</text>
+      <input class="filter-input" placeholder="模糊搜索" value="{{wasteName}}" bindinput="onWasteNameInput" />
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">危废代码</text>
+      <input class="filter-input" placeholder="模糊搜索" value="{{wasteCode}}" bindinput="onWasteCodeInput" />
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">运行部名称</text>
+      <input class="filter-input" placeholder="输入运行部" value="{{department}}" bindinput="onDepartmentInput" />
+    </view>
+
+    <view class="filter-row">
+      <text class="filter-label">装置名称</text>
+      <input class="filter-input" placeholder="输入装置" value="{{device}}" bindinput="onDeviceInput" />
+    </view>
+
+    <view class="filter-row">
+      <button class="btn-reset" bindtap="onReset">重置</button>
+      <button class="btn-search" bindtap="loadData">查询</button>
+      <text class="total-count">共 {{total}} 条，显示前{{list.length}}条</text>
+    </view>
+  </view>
+
+  <!-- 数据列表 -->
+  <view class="list-box">
+    <block wx:if="{{list.length > 0}}">
+      <view class="card" wx:for="{{list}}" wx:key="_id">
+        <view class="card-header">
+          <view class="status-tag waiting" wx:if="{{item.status === 0}}">待称重</view>
+          <view class="status-tag in" wx:if="{{item.status === 1}}">在库</view>
+          <view class="status-tag out" wx:if="{{item.status === 2}}">已出库</view>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">危废名称</text>
+          <text>{{item.wasteName || '未命名'}} ({{item.wasteCode || '-'}})</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">装置名称</text>
+          <text>{{item.department || '-'}} · {{item.device || '-'}}</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">重量</text>
+          <text>{{item.weight ? item.weight + ' 吨' : '尚未称重'}}</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">容器编码</text>
+          <text>{{item.containerCode || '-'}}</text>
+        </view>
+
+        <view class="card-row">
+          <text class="card-label">日期</text>
+          <text>{{item.produceDate || '-'}}</text>
+        </view>
+
+        <block wx:if="{{item.status === 2}}">
+          <view class="card-row">
+            <text class="card-label">出库编码</text>
+            <text class="outbound-text">{{item.outboundNo || '-'}}</text>
+          </view>
+          <view class="card-row">
+            <text class="card-label">出库时间</text>
+            <text>{{item.outbound_time || '-'}}</text>
+          </view>
+        </block>
+
+        <!-- 仅"在库"状态显示出库按钮 -->
+        <view class="card-actions">
+          <button class="btn-outbound" wx:if="{{item.status === 1}}" data-id="{{item._id}}" bindtap="doOutbound">出库</button>
+        </view>
+      </view>
+    </block>
+    <view wx:else class="empty">暂无符合条件的数据</view>
+  </view>
+</view>

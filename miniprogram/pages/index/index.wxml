@@ -1,0 +1,34 @@
+<view class="container">
+  <view class="form-card">
+    <view class="row"><text class="label">产生日期</text><text class="value">{{date}}</text></view>
+    <view class="row">
+      <text class="label">运行部 *</text>
+      <picker mode="selector" range="{{['炼油一部', '炼油二部', '运行部']}}" bindchange="onDepartmentChange">
+        <view class="value green">{{department || '请选择运行部'}}</view>
+      </picker>
+    </view>
+    <view class="row">
+      <text class="label">产废装置 *</text>
+      <picker mode="selector" range="{{['1#1000万吨/年常压蒸馏装置', '2#催化裂化装置']}}" bindchange="onDeviceChange">
+        <view class="value green">{{device || '请选择装置'}}</view>
+      </picker>
+    </view>
+    <view class="row" bindtap="onWasteNameTap">
+      <text class="label">危废名称 *</text>
+      <view class="value green">{{wasteName || '请选择危废'}}</view>
+    </view>
+    <picker mode="selector" range="{{wasteList}}" range-key="name" bindchange="onWasteConfirm" wx:if="{{showWastePicker}}">
+      <view style="display:none;">触发选择器</view>
+    </picker>
+    
+    <view class="row"><text class="label">包装类型 *</text><text class="value green">{{packageType}}</text></view>
+    <view class="row"><text class="label">包装容量 *</text><text class="value green">{{capacity}}</text></view>
+    <view class="row"><text class="label">包装材质 *</text><text class="value green">{{material}}</text></view>
+    <view class="row"><text class="label">包装数量 *</text><input class="input" value="{{count}}" bindinput="onCountInput" placeholder="请输入数量"/></view>
+    <view class="row"><text class="label">责任人</text><input class="input" value="{{person}}" bindinput="onPersonInput" placeholder="请输入"/></view>
+    <view class="row"><text class="label">联系方式</text><input class="input" value="{{contact}}" bindinput="onContactInput" placeholder="请输入"/></view>
+    <view class="row"><text class="label">去向</text><text class="value">{{destination}}</text></view>
+    <view class="row"><text class="label">批次号</text><input class="input" value="{{batchNo}}" bindinput="onBatchInput" placeholder="选填，不填自动生成"/></view>
+  </view>
+  <button class="submit-btn" bindtap="submit">提交生成</button>
+</view>

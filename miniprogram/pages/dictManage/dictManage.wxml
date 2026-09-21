@@ -1,0 +1,284 @@
+<view class="container">
+  <!-- 顶部操作栏 -->
+  <view class="top-bar">
+    <view class="page-title">危废名录管理</view>
+    <view class="top-actions">
+      <text class="btn-add" bindtap="onOpenAdd">＋ 新增</text>
+      <text class="btn-import" bindtap="onImportTap">导入名录</text>
+    </view>
+  </view>
+
+  <!-- 统计条 -->
+  <view class="stat-bar">
+    <view class="stat-item">
+      <text class="stat-num">{{total}}</text>
+      <text class="stat-label">总条目</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num stat-hw">{{hwCount}}</text>
+      <text class="stat-label">危险废物</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num stat-normal">{{normalCount}}</text>
+      <text class="stat-label">一般固废</text>
+    </view>
+  </view>
+
+  <!-- 筛选区 -->
+  <view class="filter-card">
+    <view class="filter-row">
+      <text class="filter-label">关键词</text>
+      <input class="filter-input" placeholder="代码/名称/行业/名录" value="{{keyword}}" bindinput="onKeywordInput" />
+    </view>
+    <view class="filter-row">
+      <text class="filter-label">部门</text>
+      <picker mode="selector" range="{{departmentList}}" value="{{departmentIndex}}" bindchange="onDepartmentChange">
+        <view class="filter-picker">{{currentDepartment || '全部部门'}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <text class="filter-label">装置</text>
+      <picker mode="selector" range="{{deviceList}}" value="{{deviceIndex}}" bindchange="onDeviceChange">
+        <view class="filter-picker">{{currentDevice || '全部装置'}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <text class="filter-label">类别</text>
+      <picker mode="selector" range="{{categoryList}}" value="{{categoryIndex}}" bindchange="onCategoryChange">
+        <view class="filter-picker">{{currentCategory || '全部类别'}}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <button class="btn-search" bindtap="onSearch">查询</button>
+      <button class="btn-reset" bindtap="onReset">重置</button>
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="list-box">
+    <block wx:if="{{list.length > 0}}">
+      <view class="card" wx:for="{{list}}" wx:key="_id">
+        <!-- 头部：类别 + 危险特性 -->
+        <view class="card-head">
+          <view class="head-tags">
+            <text class="tag-category {{item.category === '一般固废' ? 'normal' : ''}}">
+              {{item.category || '一般固废'}}
+            </text>
+            <text class="tag-hazard" wx:if="{{item.hazard}}">{{hazardLabel(item.hazard)}}</text>
+          </view>
+          <view class="head-btns">
+            <text class="btn-edit" bindtap="onOpenEdit" data-id="{{item._id}}" data-field="waste_name">修改</text>
+            <text class="btn-delete" bindtap="onDelete" data-id="{{item._id}}">删除</text>
+          </view>
+        </view>
+
+        <!-- 固废名称 + 代码 -->
+        <view class="card-name-row">
+          <text class="card-name">{{item.waste_name || '-'}}</text>
+          <text class="val-code" wx:if="{{item.waste_code}}">{{item.waste_code}}</text>
+          <text class="no-code" wx:else>无代码</text>
+        </view>
+
+        <!-- 装置/部门（突出显示，因为不可编辑） -->
+        <view class="card-sub" wx:if="{{item.device || item.department}}">
+          <text class="card-sub-text">{{item.department || '未设置部门'}} · {{item.device || '未设置装置'}}</text>
+        </view>
+
+        <!-- 产污 -->
+        <view class="card-row" wx:if="{{item.source}}">
+          <text class="row-tag">产污</text>
+          <text class="row-val">{{item.source}}</text>
+          <text class="row-btn" bindtap="onOpenEdit" data-id="{{item._id}}" data-field="source">改</text>
+        </view>
+
+        <!-- 名录 -->
+        <view class="card-row catalog-row" wx:if="{{item.catalog_name}}">
+          <text class="row-tag tag-catalog">名录</text>
+          <text class="row-val val-catalog">{{item.catalog_name}}</text>
+          <text class="row-btn" bindtap="onOpenEdit" data-id="{{item._id}}" data-field="catalog_name">改</text>
+        </view>
+
+        <!-- 行业 -->
+        <view class="card-row" wx:if="{{item.industry}}">
+          <text class="row-tag">行业</text>
+          <text class="row-val">{{item.industry}}</text>
+          <text class="row-btn" bindtap="onOpenEdit" data-id="{{item._id}}" data-field="industry">改</text>
+        </view>
+
+        <!-- 危险特性 -->
+        <view class="card-row" wx:if="{{item.hazard}}">
+          <text class="row-tag">特性</text>
+          <text class="row-val val-hazard">{{item.hazard}}</text>
+          <text class="row-btn" bindtap="onOpenEdit" data-id="{{item._id}}" data-field="hazard">改</text>
+        </view>
+      </view>
+
+      <view class="load-more" wx:if="{{hasMore}}">
+        <button size="mini" bindtap="loadMore" loading="{{loading}}">加载更多</button>
+      </view>
+      <view class="load-end" wx:else><text>—— 已加载全部 ——</text></view>
+    </block>
+    <view wx:else class="empty">暂无数据</view>
+  </view>
+</view>
+
+<!-- ============ 新增弹窗 ============ -->
+<view class="mask" wx:if="{{showAdd}}" bindtap="onCloseAdd"></view>
+<view class="sheet" wx:if="{{showAdd}}" catchtouchmove="true">
+  <view class="sheet-head">
+    <text class="sheet-title">新增危废条目</text>
+    <text class="sheet-close" bindtap="onCloseAdd">✕</text>
+  </view>
+
+  <scroll-view scroll-y="true" class="sheet-body">
+    <!-- 必填：名称 -->
+    <view class="form-item">
+      <text class="form-label">固废名称 <text class="req">*</text></text>
+      <input class="form-input" value="{{addData.waste_name}}" placeholder="如：废矿物油"
+        maxlength="100" bindinput="onAddInput" data-field="waste_name" />
+    </view>
+
+    <!-- 必填：类别 -->
+    <view class="form-item">
+      <text class="form-label">危废类别 <text class="req">*</text></text>
+      <picker mode="selector" range="{{categoryOptions}}" value="{{addCategoryIndex}}" bindchange="onAddCategoryChange">
+        <view class="form-picker {{addData.category ? '' : 'placeholder'}}">
+          {{addData.category || '请选择类别'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 部门（必填，一般从当前登录用户带出） -->
+    <view class="form-item">
+      <text class="form-label">部门 <text class="req">*</text></text>
+      <picker mode="selector" range="{{departmentList}}" value="{{addDepartmentIndex}}" bindchange="onAddDepartmentChange">
+        <view class="form-picker {{addData.department ? '' : 'placeholder'}}">
+          {{addData.department || '请选择部门'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 装置（必填） -->
+    <view class="form-item">
+      <text class="form-label">装置 <text class="req">*</text></text>
+      <picker mode="selector" range="{{deviceList}}" value="{{addDeviceIndex}}" bindchange="onAddDeviceChange">
+        <view class="form-picker {{addData.device ? '' : 'placeholder'}}">
+          {{addData.device || '请选择装置'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 代码 -->
+    <view class="form-item">
+      <text class="form-label">废物代码</text>
+      <input class="form-input" value="{{addData.waste_code}}" placeholder="如 251-006-08"
+        maxlength="11" bindinput="onAddInput" data-field="waste_code" />
+    </view>
+
+    <!-- 危险特性 -->
+    <view class="form-item">
+      <text class="form-label">危险特性</text>
+      <view class="hazard-grid">
+        <view
+          wx:for="{{hazardOptions}}"
+          wx:key="value"
+          class="hazard-chip {{addHazardStr.indexOf(',' + item.value + ',') >= 0 ? 'active' : ''}}"
+          bindtap="onAddToggleHazard"
+          data-value="{{item.value}}"
+        >{{item.value}} {{item.name}}</view>
+      </view>
+    </view>
+
+    <!-- 产污环节 -->
+    <view class="form-item">
+      <text class="form-label">产污环节</text>
+      <input class="form-input" value="{{addData.source}}" placeholder="如 换热设备定期清洗维护过程产生"
+        maxlength="200" bindinput="onAddInput" data-field="source" />
+    </view>
+
+    <!-- 名录名称 -->
+    <view class="form-item">
+      <text class="form-label">名录名称</text>
+      <textarea class="form-textarea" value="{{addData.catalog_name}}" placeholder="如 石油炼制换热器管束清洗过程中产生的含油污泥"
+        maxlength="500" auto-height bindinput="onAddInput" data-field="catalog_name" />
+    </view>
+
+    <!-- 行业 -->
+    <view class="form-item">
+      <text class="form-label">行业来源</text>
+      <input class="form-input" value="{{addData.industry}}" placeholder="如 精炼石油产品制造"
+        maxlength="100" bindinput="onAddInput" data-field="industry" />
+    </view>
+  </scroll-view>
+
+  <button class="btn-save" bindtap="onSaveAdd" loading="{{saving}}">确认新增</button>
+</view>
+
+<!-- ============ 编辑弹窗 ============ -->
+<view class="mask" wx:if="{{showEdit}}" bindtap="onCloseEdit"></view>
+<view class="sheet" wx:if="{{showEdit}}" catchtouchmove="true">
+  <view class="sheet-head">
+    <text class="sheet-title">修改{{editFieldLabel}}</text>
+    <text class="sheet-close" bindtap="onCloseEdit">✕</text>
+  </view>
+
+  <!-- 危险特性多选（整块按钮式） -->
+  <view wx:if="{{editField === 'hazard'}}" class="hazard-options">
+    <view
+      wx:for="{{hazardOptions}}"
+      wx:key="value"
+      class="hazard-opt"
+      style="{{selectedStr.indexOf(',' + item.value + ',') >= 0 ? 'background:#1677ff;border-color:#1677ff;' : ''}}"
+      bindtap="onToggleHazard"
+      data-value="{{item.value}}"
+    >
+      <text class="opt-code" style="{{selectedStr.indexOf(',' + item.value + ',') >= 0 ? 'color:#fff;' : ''}}">{{item.value}}</text>
+      <text class="opt-name" style="{{selectedStr.indexOf(',' + item.value + ',') >= 0 ? 'color:#fff;' : ''}}">{{item.name}}</text>
+    </view>
+    <view
+      class="hazard-opt clear-btn"
+      style="{{hazardSelected.length === 0 ? 'opacity:0.35;pointer-events:none;' : ''}}"
+      bindtap="onClearHazard"
+    >
+      <text class="opt-name">清空</text>
+    </view>
+  </view>
+
+  <!-- 类别单选 -->
+  <view wx:if="{{editField === 'category'}}" class="category-options">
+    <view
+      wx:for="{{categoryOptions}}"
+      wx:key="*this"
+      class="category-opt {{editValue === item ? 'active' : ''}}"
+      bindtap="onSelectCategory"
+      data-value="{{item}}"
+    >{{item}}</view>
+  </view>
+
+  <!-- 普通文本 -->
+  <block wx:if="{{editField !== 'hazard' && editField !== 'category'}}">
+    <textarea
+      wx:if="{{editField === 'catalog_name' || editField === 'source'}}"
+      class="edit-input edit-textarea"
+      value="{{editValue}}"
+      placeholder="请输入{{editFieldLabel}}"
+      maxlength="500"
+      auto-height
+      focus
+      bindinput="onEditValueInput"
+    ></textarea>
+    <input
+      wx:else
+      class="edit-input"
+      value="{{editValue}}"
+      placeholder="请输入{{editFieldLabel}}"
+      maxlength="100"
+      focus
+      bindinput="onEditValueInput"
+    />
+  </block>
+
+  <button class="btn-save" bindtap="onSaveEdit" loading="{{saving}}">确定修改</button>
+</view>
